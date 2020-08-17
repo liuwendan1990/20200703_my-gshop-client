@@ -1,6 +1,6 @@
 <template>
   <section class="search">
-    <Header title="搜 索"/>
+    <Header title="搜索"></Header>
     <form class="search_form" action="#">
       <input type="search" name="search" placeholder="请输入商家或美食名称" class="search_input">
       <input type="submit" name="submit" class="search_submit">
@@ -10,6 +10,7 @@
 
 <script type="text/ecmascript-6">
   export default {
+    name:'Search'
   }
 </script>
 

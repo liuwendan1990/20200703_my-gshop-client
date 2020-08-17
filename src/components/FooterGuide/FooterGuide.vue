@@ -1,41 +1,41 @@
 <template>
   <footer class="footer_guide border-1px">
-    <span class="guide_item" :class="{on: $route.path==='/msite'}" @click="goTo('/msite')"><!-- 什么时候用对象语法: 类名确定, 但不确定有没有 -->
+    <a href="javascript:;" class="guide_item" :class="{on:$route.path==='/msite'}" @click="goTo('/msite')"><!-- 类目确定，但不确定有没有-->
       <span class="item_icon">
         <i class="iconfont icon-waimai"></i>
       </span>
       <span>外卖</span>
-    </span>
-    <span class="guide_item" :class="{on: $route.path==='/search'}" @click="goTo('/search')">
+    </a>
+    <a href="javascript:;" class="guide_item" :class="{on:$route.path==='/search'}" @click="goTo('/search')">
       <span class="item_icon">
         <i class="iconfont icon-search"></i>
       </span>
       <span>搜索</span>
-    </span>
-    <span class="guide_item" :class="{on: $route.path==='/order'}" @click="goTo('/order')">
+    </a>
+    <a href="javascript:;" class="guide_item" :class="{on:$route.path==='/order'}" @click="goTo('/order')">
       <span class="item_icon">
         <i class="iconfont icon-dingdan"></i>
       </span>
       <span>订单</span>
-    </span>
-    <span class="guide_item" :class="{on: $route.path==='/profile'}" @click="goTo('/profile')">
+    </a>
+    <a href="javascript:;" class="guide_item" :class="{on:$route.path==='/profile'}" @click="goTo('/profile')">
       <span class="item_icon">
         <i class="iconfont icon-geren"></i>
       </span>
       <span>我的</span>
-    </span>
+    </a>
   </footer>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   export default {
     name: 'FooterGuide',
     methods: {
-      goTo (path) {
-        // 编程式路由导航
+      goTo(path) {
         this.$router.replace(path)
+        // this.$router.push('') //push方法是有回退功能的，这里不需要
       }
-    }
+    },
   }
 </script>
 

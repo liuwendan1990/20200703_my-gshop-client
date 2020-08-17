@@ -1,6 +1,6 @@
 <template>
   <section class="order">
-    <Header title="订单列表"/>
+    <Header title="订单列表"></Header>
     <section class="order_no_login">
       <img src="./images/person.png">
       <h3>登录后查看外卖订单</h3>
@@ -9,8 +9,9 @@
   </section>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   export default {
+    name:'Order'
   }
 </script>
 

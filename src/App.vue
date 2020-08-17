@@ -1,16 +1,25 @@
 <template>
   <div id="app">
-    app
+    <router-view></router-view>
+    <FooterGuide v-show="$route.meta.showFooter"></FooterGuide>
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
+import FooterGuide from './components/FooterGuide/FooterGuide.vue'
 
 export default {
-  name: 'app'
+  components:{
+    FooterGuide
+  },
+  mounted(){
+    this.$store.dispatch('getAddress')
+  }
 }
 </script>
 
-<style lang="stylus" rel="stylesheet/stylus" scoped>
-
+<style lang="stylus" rel="stylesheet/stylus">
+#app
+  width 100%
+  height 100%
 </style>

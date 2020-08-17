@@ -1,164 +1,142 @@
 <template>
   <section class="msite">
     <!--首页头部-->
-    <Header :title="address.name || '正在定位中'">
-      <span class="header_search" slot="left" @click="$router.replace('/search')">
+    <Header :title="address.name || '正在定位中...'">
+      <span class="header_search" slot="left">
         <i class="iconfont icon-sousuo"></i>
       </span>
-
       <span class="header_login" slot="right">
-        <i v-if="user._id" class="iconfont icon-geren"></i>
-        <span class="header_login_text" v-else @click="$router.push('/login')">登录|注册</span>
+        <span class="header_login_text">登录|注册</span>
       </span>
     </Header>
     <!--首页导航-->
     <nav class="msite_nav">
       <div class="swiper-container">
         <div class="swiper-wrapper">
-          <!-- categorysArr -->
-          <div class="swiper-slide" v-for="(categorys, index) in categorysArr" :key="index">
-            <a href="javascript:" class="link_to_food" v-for="(c, index) in categorys" :key="index">
+          <div class="swiper-slide" v-for="(categorys,index) in categorysArr2" :key="index">
+            <a href="javascript:" class="link_to_food" v-for="(c,index) in categorys" :key="index">
               <div class="food_container">
-                <img :src="'https://fuss10.elemecdn.com' + c.image_url">
+                <img :src="imgBaseUrl + c.image_url">
               </div>
               <span>{{c.title}}</span>
             </a>
           </div>
-         
         </div>
         <!-- Add Pagination -->
         <div class="swiper-pagination"></div>
       </div>
     </nav>
-    <!--首页附近商家-->
-    <ShopList/>
+    <Shops/>
   </section>
 </template>
 
-<script type="text/ecmascript-6">
-  import { mapState } from 'vuex'
-  import Swiper from 'swiper'
-  import "swiper/dist/css/swiper.css"
-  import ShopList from '../../components/ShopList/ShopList'
+<script>
+  import chunk from 'lodash/chunk'
+  import Swiper from 'swiper/swiper-bundle.min.js'
+  // import Swiper from 'swiper'
+  import 'swiper/swiper-bundle.min.css'
+  import {mapState} from 'vuex'
+  import Shops from 'components/Shops/Shops.vue'
 
   export default {
     name: 'Msite',
-
-    computed: {
-      ...mapState({
-        address: state => state.msite.address, 
-        categorys: state => state.msite.categorys,
-        user: state => state.user.user
-      }),
-
-      /* 
-      根据分类的一维数组生成二维数组
-      小数组的最大长度为8
-      */
-      categorysArr () {
-        // 取出相关的数据
-        const bigArr = []
-        let smallArr = []
-        const {categorys} = this
-        // 计算产生结果
-        categorys.forEach(c => {
-
-          // 将小数组放入大数组(同一个小数组只能被保存一次)
-          if (smallArr.length===0) {
-            bigArr.push(smallArr)
-          }
-
-          // 将分类对象放入小数组(小数组的长度最大为8)
-          smallArr.push(c)
-          // 如果满了, 重新准备一个新的小数组
-          if (smallArr.length===8) {
-            smallArr = []
-          }
-          
-        })
-
-        // 返回结果
-        return bigArr
+    components:{
+      Shops
+    },
+    data() {
+      return {
+         imgBaseUrl: 'https://fuss10.elemecdn.com'
       }
     },
-
-    // 组件界面初始显示之后立即回调
-    async mounted () {
-      // 分发action, 异步获取商家列表
-      this.$store.dispatch("getShops")
-      // 分发action, 异步获取分类列表
-      /* this.$store.dispatch("getCategorys", () => { // categorys状态数据更新了
-        // 将回调延迟到下次 DOM 更新循环之后执行。在修改数据之后立即使用它，然后等待 DOM 更新。
-        this.$nextTick(() => { // 回调函数在界面更新之后执行
-          new Swiper ('.swiper-container', {
-            // direction: 'vertical', // 垂直切换选项
-            loop: true, // 循环模式选项
-            // 如果需要分页器
-            pagination: {
-              el: '.swiper-pagination',
-            },
-          })
-        })
-      }) */
-      await this.$store.dispatch("getCategorys") // 返回的promise在状态数据变化且界面更新后才成功
-      new Swiper ('.swiper-container', {
-        // direction: 'vertical', // 垂直切换选项
+    async mounted(){
+      this.$store.dispatch('getShops')
+      //方式二 callback + nextTick() 重点函数、回调函数的理解
+      // this.$store.dispatch('getCategorys',()=>{//categorys数据变化了
+      //   this.$nextTick(()=>{
+      //     /* 创建swiper对象的时机？必须在列表页面显示之后 */
+      //     new Swiper('.swiper-container',{
+      //       loop: true, // 循环模式选项
+            
+      //       // 如果需要分页器
+      //       pagination: {
+      //         el: '.swiper-pagination',
+      //       },
+      //     })
+      //   })
+      // })
+      
+      //方式三 返回的promise在状态更新且界面更新之后才成功
+       await this.$store.dispatch('getCategorys')
+      /* 创建swiper对象的时机？必须在列表页面显示之后 */
+      new Swiper('.swiper-container',{
         loop: true, // 循环模式选项
+        
         // 如果需要分页器
         pagination: {
           el: '.swiper-pagination',
         },
       })
-
-      // 创建对象的时机: 在列表数据显示之后
-      /* setTimeout(() => {
-        var mySwiper = new Swiper ('.swiper-container', {
-          // direction: 'vertical', // 垂直切换选项
-          loop: true, // 循环模式选项
-          // 如果需要分页器
-          pagination: {
-            el: '.swiper-pagination',
-          },
-        })
-      }, 1000) */
     },
+    computed:{
+      ...mapState(['address','categorys']),
+      /* 分类的二维数组 */
+      categorysArr(){
+        const bigArr = [];
+        let smallArr = [];
+        const {categorys} = this;
+        //遍历总数组
+        categorys.forEach(c => {
+          //将小数组添加到大数组(只能添加一次)
+          if(smallArr.length===0){
+             bigArr.push(smallArr)
+          }
+          //将c添加到小数组
+          smallArr.push(c);
 
-    /* 
-    解决创建swiper对象之后不能正常轮播
-    原因: 创建对象的时机太早(必须在列表显示之后)
-    解决: 
-      1. watch + nextTick()
-      2. callback + nextTick()
-      3. 利用dispatch()返回的promise
-    */
-    /* watch: {
-      // 更新状态数据 ==> 立即同步调用监视的回调函数 ==> 异步更新界面
-      categorys () { // categorys状态数据更新了
-        // 将回调延迟到下次 DOM 更新循环之后执行。在修改数据之后立即使用它，然后等待 DOM 更新。
-        this.$nextTick(() => { // 回调函数在界面更新之后执行
-          new Swiper ('.swiper-container', {
-            // direction: 'vertical', // 垂直切换选项
-            loop: true, // 循环模式选项
-            // 如果需要分页器
-            pagination: {
-              el: '.swiper-pagination',
-            },
-          })
+          //小数组的最大长度要为8
+          if(smallArr.length===8){
+             smallArr = []
+          }
+         
         })
-      }
-    }, */
 
-    components: {
-      ShopList
-    }
+        return bigArr;
+      },
+      categorysArr2(){
+        return chunk(this.categorys,8)
+      }
+    },
+    /* 
+      创建Swiper对象轮播有问题？怎么解决
+      1、watch + nextTick()(某个数据变化导致界面变化；在生命周期函数update是任何数据变化都会更新)
+      2、callback + nextTick()
+      3、利用dipatch()返回的promise
+    */
+    // watch:{
+    //   //更新状态数据 ==》调用监视的回调==》异步更新界面
+    //   categorys(){//categorys发生改变了/数组数据更新了
+    //     //将回调延迟到下次DOM更新循环之后执行。在修改数据之后立即使用它
+    //     this.$nextTick(()=>{
+    //       /* 创建swiper对象的时机？必须在列表页面显示之后 */
+    //       new Swiper('.swiper-container',{
+    //         loop: true, // 循环模式选项
+            
+    //         // 如果需要分页器
+    //         pagination: {
+    //           el: '.swiper-pagination',
+    //         },
+    //       })
+    //     })
+    //   }
+    // }
   }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" scoped>
   @import '../../common/stylus/mixins.styl'
-  .msite  //首页
+  &.msite  //首页
     width 100%
-    .msite_nav
+   .msite_nav
       bottom-border-1px(#e4e4e4)
       margin-top 45px
       height 200px
