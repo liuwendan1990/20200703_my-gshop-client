@@ -6,6 +6,7 @@ import Header from 'components/Header/Header.vue'
 import Star from 'components/Star/Star.vue'
 
 import './api'
+import './validate.js'
 
 Vue.config.productionTip = false //禁止在Vue启动时生产提示
 
