@@ -9,7 +9,10 @@ import {
 import {
     RECEIVE_ADDRESS,
     RECEIVE_CATEGORYS,
-    RECEIVE_SHOPS
+    RECEIVE_SHOPS,
+    RECEIVE_USER,
+    RECEIVE_TOKEN,
+    RESET_USER
 } from './mutaion-types'
 
 export default {
@@ -56,5 +59,26 @@ export default {
             const shops = result.data;
             commit(RECEIVE_SHOPS,shops)
         }
-    }
+    },
+    /* 
+        保存user的同步action
+    */
+    saveUser({commit},user){
+        const token = user.token;
+        //将token保存到localStorage
+        localStorage.setItem('token_key', token)
+        //将token保存到state
+        commit(RECEIVE_TOKEN,{token})
+        //删除user中的token
+        delete user.token;
+        commit(RECEIVE_USER,{user})
+    },
+    /* 
+        退出登录
+    */
+   logout({commit}){
+    commit(RESET_USER)
+    commit(RESET_TOKEN)
+    localStorage.removeItem('token_key')
+}
 }
