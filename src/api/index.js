@@ -62,4 +62,30 @@ export const reqSmsLogin = (phone,code) =>ajax.post(BASE + '/login_sms',{
     code
  })
 
+ /* 
+6、自动登录
+*/
+export const reqAutoLogin = (phone,code) =>ajax({
+    url:BASE + '/auto_login',
+    headers:{
+        needToken:true
+    }
+    
+ })
+
 export const reqBaiDuXxx=()=>ajax(BASE2+'/xxx')
+
+/**
+ * 获取商家信息
+ */
+export const reqShopInfo = () => ajax('/shop_info')
+
+/**
+ * 获取商家评价数组
+ */
+export const reqShopRatings = () => ajax('/shop_ratings')
+
+/**
+ * 获取商家商品数组
+ */
+export const reqShopGoods = () => ajax('/shop_goods')
