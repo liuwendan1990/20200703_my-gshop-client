@@ -101,12 +101,15 @@
   export default {
     name:'Profile',
     computed:{
-      ...mapState(['user'])
+      // ...mapState(['user'])
+      ...mapState({
+        user:state=>state.user.user
+      })
     },
 
     methods:{
       logout (){
-        MessageBox.confirm('确定退出吗?').then(action => {
+        MessageBox.confirm('确定退出吗?').then(() => {
           this.$store.dispatch('logout')
         },()=>{});
       }

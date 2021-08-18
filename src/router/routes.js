@@ -3,7 +3,7 @@
  */
 
 //vue.config.js中有路径别名../pages可简写为pages
-import Msite from 'pages/Msite/Msite.vue'
+import Msite from '../pages/Msite/Msite.vue'
 import Search from '../pages/Search/Search.vue'
 import Profile from '../pages/Profile/Profile.vue'
 import Order from '../pages/Order/Order.vue'

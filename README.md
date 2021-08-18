@@ -150,7 +150,7 @@
         npm remove vue-cli -g
         yarn global remove vue-cli
         yarn global add @vue/cli
-        vue create gshop-client3
+        vue create gshop-client
     2). 打包运行
         开发环境运行: yarn serve
         生产环境打包运行: yarn run build  / serve dist
@@ -256,10 +256,14 @@
         字符串(必须用双向包起来)
     4. value是什么?
         string/number/boolean/{}/[]
-    5. 设计
+    5. json与js的关系
+        json本身是一种特定格式的js字符串
+        json对象与js对象可以相互转换
+        json数组与js数组可以相互转换
+    6. 设计
         {}与[]的选择
-    6. mock数据与真实数据
-        结构要一样, 值可以不一样
+    7. mock的json数据与真实接口数据的关系
+        结构(类型和名称)要一样, 值(数据)可以不一样
 
 ## 6. mockjs的理解和使用
 

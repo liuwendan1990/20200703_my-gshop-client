@@ -62,10 +62,10 @@ export const reqSmsLogin = (phone,code) =>ajax.post(BASE + '/login_sms',{
     code
  })
 
- /* 
-6、自动登录
+/* 
+ 7、自动登录
 */
-export const reqAutoLogin = (phone,code) =>ajax({
+export const reqAutoLogin = () =>ajax({
     url:BASE + '/auto_login',
     headers:{
         needToken:true

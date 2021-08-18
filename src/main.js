@@ -7,14 +7,16 @@ import router from './router'
 import store from './store'
 import Header from 'components/Header/Header.vue'
 import Star from 'components/Star/Star.vue'
-
+import CartControl from 'components/CartControl/CartControl.vue'
 // import './api'
+
 
 Vue.config.productionTip = false //禁止在Vue启动时生产提示
 
 //注册全局组件
 Vue.component('Header',Header)
 Vue.component('Star',Star)
+Vue.component('CartControl',CartControl)
 Vue.component(Button.name, Button)
 
 // new Vue({

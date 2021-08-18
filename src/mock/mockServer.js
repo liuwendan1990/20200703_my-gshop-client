@@ -1,5 +1,8 @@
+/* 
+使用mockjs实现mock数据接口
+*/
 import Mock from 'mockjs'
-import data from './data.json'
+import data from './data.json' //加载json文件得到的是解析后的js对象
 
 /* eslint-disable no-console */
 console.log('mockServer')

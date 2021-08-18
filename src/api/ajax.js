@@ -26,7 +26,7 @@ axios.interceptors.request.use(config=>{
     }
     //4、如果需要携带token的请求，从state中取出token
     if(config.headers.needToken){
-        const token = store.state.token;
+        const token = store.state.user.token;
         // const token = '';
         //1）没有，不发请求，直接进入失败的流程
         if(!token){
@@ -40,7 +40,7 @@ axios.interceptors.request.use(config=>{
     }
     return config
 })
-//添加相应拦截器
+//添加响应拦截器
 axios.interceptors.response.use(response=>{
     //2.让成功的结果不是response，而是response.data
     return response.data

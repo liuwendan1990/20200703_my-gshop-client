@@ -20,15 +20,21 @@
 
 <script>
 import ShopHeader from '../../components/ShopHeader/ShopHeader.vue'
+
  export default {
   name: 'Shop',
+  mounted(){
+    this.$store.dispatch('getShopInfo');
+    this.$store.dispatch('getShopRatings');
+    this.$store.dispatch('getShopGoods');
+  },
   data () {
    return {
 
    }
   },
   components: {
-      ShopHeader
+      ShopHeader,
   }
  }
 </script>
