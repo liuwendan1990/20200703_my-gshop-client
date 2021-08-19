@@ -12,7 +12,8 @@ import {
     RECEIVE_RATINGS,
     RECEIVE_GOODS,
     ADD_FOOD_COUNT,
-    REDUCE_FOOD_COUNT
+    REDUCE_FOOD_COUNT,
+    CLEAR_CART
 } from '../mutaion-types'
 
 const state = {
@@ -56,6 +57,15 @@ const mutations = {
             }
         }
     },
+
+    [CLEAR_CART](state){
+        //将购物车中所有food的count清除
+        state.cartFoods.forEach(food => {
+            food.count = 0
+        });
+        //清空购物车数组
+        state.cartFoods = []
+    }
 }
 const actions = {
      // 异步获取商家信息

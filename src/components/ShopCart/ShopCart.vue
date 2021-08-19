@@ -2,7 +2,7 @@
  <div>
   <div class="shopcart">
     <div class="content">
-      <div class="content-left">
+      <div class="content-left" @click="toggleShow">
         <div class="logo-wrapper">
           <div class="logo" :class="{highlight:totalCount>0}">
             <i class="iconfont icon-shopping_cart" :class="{highlight:totalCount>0}"></i>
@@ -18,40 +18,47 @@
         </div>
       </div>
     </div>
-    <div class="shopcart-list" v-show="isShow">
-      <div class="list-header">
-        <h1 class="title">购物车</h1>
-        <span class="empty">清空</span>
+    <transition name="move">
+      <div class="shopcart-list" v-show="listShow">
+        <div class="list-header">
+          <h1 class="title">购物车</h1>
+          <span class="empty" @click="clearCart">清空</span>
+        </div>
+        <div class="list-content" ref="foods">
+          <ul>
+            <li class="food" v-for="food in cartFoods" :key="food.name">
+              <span class="name">{{food.name}}</span>
+              <div class="price"><span>￥{{food.price}}</span></div>
+              <div class="cartcontrol-wrapper">
+                  <CartControl :food="food"/>
+                <!-- <div class="cartcontrol">
+                  <div class="iconfont icon-remove_circle_outline"></div>
+                  <div class="cart-count">1</div>
+                  <div class="iconfont icon-add_circle"></div>
+                </div> -->
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
-      <div class="list-content">
-        <ul>
-          <li class="food" v-for="food in cartFoods" :key="food.name">
-            <span class="name">{{food.name}}</span>
-            <div class="price"><span>￥{{food.price}}</span></div>
-            <div class="cartcontrol-wrapper">
-                <CartControl :food="food"/>
-              <!-- <div class="cartcontrol">
-                <div class="iconfont icon-remove_circle_outline"></div>
-                <div class="cart-count">1</div>
-                <div class="iconfont icon-add_circle"></div>
-              </div> -->
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
+    </transition>
   </div>
-  <div class="list-mask" style="display: none;"></div>
+  <transition name="fade">
+    <div class="list-mask" v-show="isShow" @click="toggleShow"></div>
+  </transition>
 </div>
 </template>
 
 <script>
+ import BScroll from 'better-scroll'
+ import { MessageBox } from 'mint-ui'
  import { mapState,mapGetters } from "vuex"
+ import { CLEAR_CART } from '../../store/mutaion-types'
  export default {
   name: '',
   data () {
    return {
-       isShow:true
+       isShow:false
    }
   },
   components: {
@@ -81,7 +88,45 @@
           }else{
               return '去结算'
           }
+      },
+      //列表是否显示
+      listShow(){
+        if(this.totalCount===0){
+          this.isShow = false
+          return false
+        }
+        //如果列表显示了，创建滚动对象
+        if(this.isShow){
+          this.$nextTick(()=>{
+            /* 单例对象；单一的实例对象 
+              1.创建前：判断对象不存在才去创建
+              2.创建后：保存创建的对象
+            */
+            if(!this.scroll){//可能此时不需要形成滑动
+              this.scroll=new BScroll(this.$refs.foods,{
+                click:true
+              })
+            }else{
+              //让滚动对象刷新：重新计算来决定要不要滑动
+              this.scroll.refresh()
+            }
+            
+          })
+        }
+        return this.isShow
       }
+  },
+  methods:{
+    toggleShow(){
+      if(this.totalCount>0){
+         this.isShow=!this.isShow
+      }
+    },
+    clearCart(){
+      MessageBox.confirm('确定清楚吗').then(()=>{
+        this.$store.commit(CLEAR_CART)
+      },()=>{})
+    }
   }
  }
 </script>
@@ -181,6 +226,11 @@
       z-index: -1
       width: 100%
       transform translateY(-100%)
+      &.move-enter-active,&.move-leave-active
+        transition all .5s
+      &.move-enter,&.move-leave-to
+        opacity 0
+        transform translateX(0)
       .list-header
         height: 40px
         line-height: 40px
