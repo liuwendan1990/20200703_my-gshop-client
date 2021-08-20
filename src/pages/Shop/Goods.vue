@@ -1,51 +1,54 @@
 <template>
-  <div class="goods">
-    <div class="menu-wrapper" ref="left">
-      <ul>
-          <!-- current currenIndex当前分类小标-->
-        <li class="menu-item" :class="{current:currentIndex===index}" v-for="(good,index) in goods" :key="good.name" @click="selectItem(index)">
-          
-          <span class="text bottom-border-1px"><img
-            class="icon" v-if="good.icon"
-            :src="good.icon"
-          />{{good.name}}</span>
-        </li>
-      </ul>
+  <div>
+    <div class="goods">
+      <div class="menu-wrapper" ref="left">
+        <ul>
+            <!-- current currenIndex当前分类小标-->
+          <li class="menu-item" :class="{current:currentIndex===index}" v-for="(good,index) in goods" :key="good.name" @click="selectItem(index)">
+            
+            <span class="text bottom-border-1px"><img
+              class="icon" v-if="good.icon"
+              :src="good.icon"
+            />{{good.name}}</span>
+          </li>
+        </ul>
+      </div>
+      <div class="foods-wrapper" ref="right">
+        <ul ref="rightUl">
+          <li class="food-list-hook" v-for="good in goods" :key="good.name">
+            <h1 class="title">{{good.name}}</h1>
+            <ul>
+              <li class="food-item bottom-border-1px" v-for="food in good.foods" :key="food.name" @click="showFood(food)">
+                <div class="icon">
+                  <img
+                    width="57"
+                    height="57"
+                    :src="food.icon"
+                  />
+                </div>
+                <div class="content">
+                  <h2 class="name">{{food.name}}</h2>
+                  <p class="desc">{{food.description}}</p>
+                  <div class="extra">
+                    <span class="count">月售{{food.sellCount}}份</span>
+                    <span>好评率{{food.rating}}%</span>
+                  </div>
+                  <div class="price">
+                    <span class="now">￥{{food.price}}</span>
+                    <span class="old" v-if="food.oldprice">￥{{food.oldPrice}}</span>
+                  </div>
+                  <div class="cartcontrol-wrapper">
+                    <CartControl :food="food" />
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <ShopCart />
     </div>
-    <div class="foods-wrapper" ref="right">
-      <ul ref="rightUl">
-        <li class="food-list-hook" v-for="good in goods" :key="good.name">
-          <h1 class="title">{{good.name}}</h1>
-          <ul>
-            <li class="food-item bottom-border-1px" v-for="food in good.foods" :key="food.name">
-              <div class="icon">
-                <img
-                  width="57"
-                  height="57"
-                  :src="food.icon"
-                />
-              </div>
-              <div class="content">
-                <h2 class="name">{{food.name}}</h2>
-                <p class="desc">{{food.description}}</p>
-                <div class="extra">
-                  <span class="count">月售{{food.sellCount}}份</span>
-                  <span>好评率{{food.rating}}%</span>
-                </div>
-                <div class="price">
-                  <span class="now">￥{{food.price}}</span>
-                  <span class="old" v-if="food.oldprice">￥{{food.oldPrice}}</span>
-                </div>
-                <div class="cartcontrol-wrapper">
-                  <CartControl :food="food" />
-                </div>
-              </div>
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-    <ShopCart />
+    <Food ref="food" :food="food"/>
   </div>
 </template>
 
@@ -53,12 +56,11 @@
 import {mapState} from 'vuex'
 import BScroll from 'better-scroll'
 import ShopCart from '../../components/ShopCart/ShopCart.vue'
+import Food from '../../components/Food/Food.vue'
 export default {
-  data() {
-    return {};
-  },
   components: {
-    ShopCart
+    ShopCart,
+    Food
   },
   
   data() {
@@ -68,6 +70,7 @@ export default {
       scrollY:0,
       tops:[],
       // rightScroll:null
+      food:{},//需要显示的food
     }
   },
   mounted(){
@@ -142,6 +145,11 @@ export default {
       this.scrollY = top;
       //让右侧列表滑动到对应位置
       this.rightScroll.scrollTo(0,-top,500)
+    },
+
+    showFood(food){
+      this.food = food
+      this.$refs.food.toggleShow()
     }
   }
 };
