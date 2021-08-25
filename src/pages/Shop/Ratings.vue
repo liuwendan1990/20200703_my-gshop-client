@@ -131,9 +131,9 @@
     },
 
     watch: {
-      ratings () { // 在当前路由刷新: 初始显示没有数据, 后面才有了数据
+      selectType () { // 在当前路由刷新: 初始显示没有数据, 后面才有了数据
         this.$nextTick(() => {
-          // console.log(this.ratings.length);
+          console.log(this.ratings.length);
           new BScroll('.ratings', {
             click: true
           })
@@ -143,7 +143,7 @@
 
     methods: {
       setSelectType (type) {
-        // console.log('setSelectType()', this)
+        console.log('setSelectType()', this)
         this.selectType = type
       },
       toggleOnlyText () {

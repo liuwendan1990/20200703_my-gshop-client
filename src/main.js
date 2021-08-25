@@ -10,7 +10,13 @@ import CartControl from 'components/CartControl/CartControl.vue'
 import Split from 'components/Split/Split.vue'
 import './mock/mockServer'
 import './filters'
+import VueLazyload from 'vue-lazyload'
+import loading from './common/img/loading.gif'
 
+//声明使用vue插件==》全局指令lazy
+Vue.use(VueLazyload, {
+  loading
+})
 
 Vue.config.productionTip = false //禁止在Vue启动时生产提示
 
@@ -20,6 +26,7 @@ Vue.component('Star',Star)
 Vue.component('CartControl',CartControl)
 Vue.component('Split',Split)
 Vue.component(Button.name, Button)
+
 
 Vue.prototype.$eventBus = new Vue()
 // new Vue({

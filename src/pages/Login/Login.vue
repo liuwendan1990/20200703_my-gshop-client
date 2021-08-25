@@ -143,6 +143,19 @@
       }else{
         MessageBox.alert(result.msg)
       }
+    },
+
+    beforeRouteEnter (to, from, next) {
+      // 如果用户已经登录，跳转到个人中心，否则放行
+      next((component)=>{//将函数延迟到组件对象创建之后执行，且传递组件对象
+        if(component.$store.state.user.token){
+          next('/profile')
+        }else{
+          next()
+        }
+      })
+
+      
     }
   }
  }
