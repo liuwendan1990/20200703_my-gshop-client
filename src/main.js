@@ -12,6 +12,7 @@ import './mock/mockServer'
 import './filters'
 import VueLazyload from 'vue-lazyload'
 import loading from './common/img/loading.gif'
+import 'default-passive-events'
 
 //声明使用vue插件==》全局指令lazy
 Vue.use(VueLazyload, {
